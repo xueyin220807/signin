@@ -34,7 +34,7 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
             singleSelect: false, //是否启用单选
             showRefresh: false,
             showJumpto: true,
-            locale: Config.language === 'zh-cn' ? 'zh-CN' : 'en-US',
+            locale: Config.language === 'zh-cn' ? 'zh-CN' : 'zh-HK',
             showToggle: true,
             showColumns: true,
             pk: 'id',
@@ -126,6 +126,35 @@ define(['jquery', 'bootstrap', 'moment', 'moment/locale/zh-cn', 'bootstrap-table
                 // 写入bootstrap-table column配置
                 $.extend($.fn.bootstrapTable.columnDefaults, Table.columnDefaults, columnDefaults);
                 // 写入bootstrap-table locale配置
+                $.fn.bootstrapTable.locales['zh-HK'] = {
+                    formatLoadingMessage: function () {
+                        return '正在努力地載入資料，請稍候……';
+                    },
+                    formatRecordsPerPage: function (pageNumber) {
+                        return '每頁顯示 ' + pageNumber + ' 項記錄';
+                    },
+                    formatShowingRows: function (pageFrom, pageTo, totalRows) {
+                        return '顯示第 ' + pageFrom + ' 到第 ' + pageTo + ' 項記錄，總共 ' + totalRows + ' 項記錄';
+                    },
+                    formatSearch: function () {
+                        return '搜尋';
+                    },
+                    formatNoMatches: function () {
+                        return '沒有找到符合的結果';
+                    },
+                    formatPaginationSwitch: function () {
+                        return '隱藏/顯示分頁';
+                    },
+                    formatRefresh: function () {
+                        return '重新整理';
+                    },
+                    formatToggle: function () {
+                        return '切換';
+                    },
+                    formatColumns: function () {
+                        return '列';
+                    }
+                };
                 $.extend($.fn.bootstrapTable.locales[Table.defaults.locale], {
                     formatCommonSearch: function () {
                         return __('Common search');

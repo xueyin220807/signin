@@ -45,8 +45,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                 return Table.api.formatter.operate.call(this, value, row, index);
                             }}
                     ]
-                ]
+                ],
             });
+
+            console.log("table",table);
 
             // 为表格绑定事件
             Table.api.bindevent(table);
