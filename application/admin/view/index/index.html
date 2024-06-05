@@ -54,20 +54,44 @@
         {include file="common/script" /}
     <script>
         //隐藏插件管理
-        (function(){
-            var chajianguanliList=document.querySelectorAll('*[pinyin="chajianguanli"]');
-            if(chajianguanliList.length>0){
-                for(var i in chajianguanliList){
+        function hideChaJianGuanLi(){
+            var list=document.querySelectorAll('*[pinyin="chajianguanli"]');
+            if(list.length>0){
+                for(var i in list){
+                    console.log("i",i);
                     if(location.href.includes("dev=dev")==false){
-                        chajianguanliList[i].style.display = 'none';
+                        list[0].style.display = 'none';
+
                     }
+                    if(location.href.includes("auth/rule")==true){
+                        list[0].style.display = 'none';
+                    }
+
+
                     else{
 
                     }
 
+
                 }
             }
-        })();
+
+            list=document.querySelectorAll('*[pinyin="zaixianminglingguanli"]');
+            if(list.length>0){
+                for(var i in list){
+                    if(location.href.includes("command")==false){
+                        list[0].style.display = 'none';
+
+                    }
+                    if(location.href.includes("auth/rule")==true){
+                        list[0].style.display = 'none';
+                    }
+
+                }
+            }
+            setTimeout(hideChaJianGuanLi,500);
+        }
+        hideChaJianGuanLi();
     </script>
     </body>
 </html>
