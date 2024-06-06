@@ -38,7 +38,41 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
             Table.api.bindevent(table);
         },
         add: function () {
-            Controller.api.bindevent();
+            function checkOrganizationInputs(){
+                var count=0;
+                for(var i in organizationInputs.value){
+                    if(organizationInputs.value[i].length>0){
+                        count++;
+                    }
+                }
+                if(count==0){
+                    return false;
+                }
+                return true;
+            }
+           // Controller.api.bindevent();
+            Form.api.bindevent($("form[role=form]"), function(data, ret){
+                console.log("this 哦",this);
+                //成功
+               // Toastr.success(data);
+            }, function(data, ret){
+                //console.log("this 哦",this);
+                //Toastr.success("失败");
+               // Toastr.error(__("失败"));
+            }, function(success, error){
+                console.log("on submit",this);
+                console.log("organizationInputs",organizationInputs.value);
+                if(checkOrganizationInputs()==false){
+                    console.log("Toastr",Toastr);
+                    Toastr.error(__("Enter at least one organization name"));
+                    return false;
+                }
+                Form.api.submit(this, success, error);
+                //防止提交后多次提示
+                return false;
+
+
+            });
         },
         edit: function () {
             Controller.api.bindevent();

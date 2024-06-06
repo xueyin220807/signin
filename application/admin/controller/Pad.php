@@ -41,6 +41,8 @@ class Pad extends Backend
             return $this->view->fetch();
         }
         $params = $this->request->post('row/a');
+        var_dump($params);
+        exit();
         if (empty($params)) {
             $this->error(__('Parameter %s can not be empty', ''));
         }
@@ -53,12 +55,21 @@ class Pad extends Backend
         Db::startTrans();
         try {
             //是否采用模型验证
-            if ($this->modelValidate) {
+            /*if ($this->modelValidate) {
                 $name = str_replace("\\model\\", "\\validate\\", get_class($this->model));
                 $validate = is_bool($this->modelValidate) ? ($this->modelSceneValidate ? $name . '.add' : $name) : $this->modelValidate;
                 $this->model->validateFailException()->validate($validate);
             }
-            $result = $this->model->allowField(true)->save($params);
+            $result = $this->model->allowField(true)->save($params);*/
+            //$this->model->save
+            $Organization=new \app\admin\model\Organization();
+            $pwo=\app\admin\model\Pwo();
+            foreach($params["organization"] as $key=>$val){
+                $organization_id=$Organization->insertGetId(["name"=>$val]);
+                $pwo->insertGetId(["primary_activity_id"=>$params["primary_activity_id"],"organization_id"=>$organization_id]);
+            }
+
+
             Db::commit();
         } catch (ValidateException|PDOException|Exception $e) {
             Db::rollback();
