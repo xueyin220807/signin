@@ -10,5 +10,6 @@ return [
     'Please enter the name'=>'請輸入姓名',
     'Starttime'=>'活動開始時間',
     'Endtime'=>'活動結束時間',
-    'addData'=>'新增數據'
+    'addData'=>'新增數據',
+    'activityData'=>'活動數據'
 ];

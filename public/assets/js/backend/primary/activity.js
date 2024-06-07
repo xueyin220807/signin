@@ -31,19 +31,36 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                         {field: 'starttime', title: __('Starttime'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
                         {field: 'endtime', title: __('Endtime'), operate:'RANGE', addclass:'datetimerange', autocomplete:false, formatter: Table.api.formatter.datetime},
                         {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
-                            buttons: [{
+                            buttons: [
+                                {
+                                    name: 'detail',
+                                    text: __('activityData'),
+                                    icon: 'fa fa-list',
+                                    classname: 'btn btn-info btn-xs btn-detail btn-dialog',
+                                    title:function (row) {
+                                        return __('activityData')+"-"+ row.name;
+                                    },
+                                    url: 'pad/innerindex'
+                                },
+                                {
                                 name: 'detail',
                                 text: __('addData'),
                                 icon: 'fa fa-list',
                                 classname: 'btn btn-info btn-xs btn-detail btn-dialog',
+                                    title:function (row) {
+                                        return __('addData')+"-"+ row.name;
+                                    },
                                 url: 'pad/add'
                             },
                                 {
-                                    name: 'export',
+                                    name: 'import',
                                     text: __('Import'),
                                     icon: 'fa fa-list',
                                     classname: 'btn btn-info btn-xs btn-detail btn-dialog',
-                                    url: 'pad/add'
+                                    title:function (row) {
+                                        return __('Import')+"-"+ row.name;
+                                    },
+                                    url: 'pad/import'
                                 }
                             ],
                             formatter: Table.api.formatter.operate}
