@@ -3,6 +3,20 @@
     <head>
         <!-- 加载样式及META信息 -->
         {include file="common/meta" /}
+        <style>
+            .sidebar-form.nice-validator.n-default{
+                display: none;
+            }
+            .sidebar-form{
+                display: none;
+            }
+            .hidden-xs{
+                display: none;
+            }
+            .nav > li[class="hidden-xs"]{
+                display: none;
+            }
+        </style>
     </head>
     <body class="hold-transition {$Think.config.fastadmin.adminskin|default='skin-black-blue'} sidebar-mini {:$Think.cookie.sidebar_collapse?'sidebar-collapse':''} fixed {:$Think.config.fastadmin.multipletab?'multipletab':''} {:$Think.config.fastadmin.multiplenav?'multiplenav':''}" id="tabs">
 
@@ -89,6 +103,19 @@
 
                 }
             }
+            //会员分组
+            list=document.querySelectorAll('*[pinyin="huiyuanfenzu"]');
+            if(list.length>0){
+                list[0].style.display = 'none';
+            }
+            //会员规则
+            list=document.querySelectorAll('*[pinyin="huiyuanguize"]');
+            if(list.length>0){
+                list[0].style.display = 'none';
+            }
+
+
+
             setTimeout(hideChaJianGuanLi,500);
         }
         hideChaJianGuanLi();

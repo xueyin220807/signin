@@ -208,6 +208,10 @@ class Pad extends Backend
                             $result=$pwo->insertGetId($pwoData);
                         }
                     }
+                    $userModel=new \app\admin\model\User();
+                    $personal_id=$userModel->padUserAdd($personal);
+                    $padpModel=new \app\admin\model\Padp();
+                    $padpModel->insertGetId(["pad_id"=>$pad_id,"personal_id"=>$personal_id]);
                     $result=$pad_id;
                 }
             }

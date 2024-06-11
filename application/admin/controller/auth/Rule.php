@@ -52,6 +52,9 @@ class Rule extends Backend
             if($v["name"]=="addon"){
                 continue;
             }
+           /* if($v["name"]=="user/group"){
+                continue;
+            }*/
             $ruledata[$v['id']] = $v['title'];
             unset($v['spacer']);
 
@@ -69,6 +72,23 @@ class Rule extends Backend
         if ($this->request->isAjax()) {
             $list = $this->rulelist;
             $total = count($this->rulelist);
+            /*var_dump($list);
+            exit();*/
+            foreach($list as $key=>&$val){
+                if($val["name"]=="user/group"){
+                    unset($list[$key]);
+                }
+                if($val["name"]=="user/rule"){
+                    unset($list[$key]);
+                }
+                //category
+                if($val["name"]=="category"){
+                    unset($list[$key]);
+                }
+
+            }
+            $list=array_values($list);
+            //var_dump($list);
             $result = array("total" => $total, "rows" => $list);
 
             return json($result);

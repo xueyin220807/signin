@@ -6,6 +6,7 @@ return [
     'Type'                     => '欄目類型',
     'Image'                    => '圖片',
     'Total user'               => '總會員數',
+    'Total user2'               => '總用戶數',
     'Total addon'              => '總插件數',
     'Total category'           => '總分類數',
     'Total attachment'         => '總附件數',

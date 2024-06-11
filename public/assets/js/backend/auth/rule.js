@@ -62,6 +62,10 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form', 'template'], function
                     if(row.name=="command"){
                         return {style: "display:none"};
                     }
+                    if(row.name=="user/group"){
+                        return {style: "display:none"};
+                    }
+
                     return row.pid == 0 ? {} : {style: "display:none"};
                 }
             });
