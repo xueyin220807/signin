@@ -61,6 +61,17 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                         return __('Import')+"-"+ row.name;
                                     },
                                     url: 'pad/import'
+                                },
+                                {
+                                    name: 'export',
+                                    text: __('Export'),
+                                    icon: 'fa fa-list',
+                                    classname: 'btn btn-info btn-xs btn-detail',
+                                    title:function (row) {
+                                        return __('Export')+"-"+ row.name;
+                                    },
+                                    url: 'pad/export',
+                                    extend:' target="_blank"'
                                 }
                             ],
                             formatter: Table.api.formatter.operate}

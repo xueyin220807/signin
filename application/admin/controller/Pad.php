@@ -4,12 +4,13 @@ namespace app\admin\controller;
 
 use app\common\controller\Backend;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use think\Db;
 use think\exception\DbException;
 use think\exception\PDOException;
 use think\exception\ValidateException;
 use think\response\Json;
-
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 /**
  * 
  *
@@ -113,8 +114,8 @@ class Pad extends Backend
             }
             $result = $this->model->allowField(true)->save($params);*/
             //$this->model->save
-            $Organization=new \app\admin\model\Organization();
-            $pwo=new \app\admin\model\Pwo();
+            $organizationModel=new \app\admin\model\Organization();
+            $pwoModel=new \app\admin\model\Pwo();
             $pad=new \app\admin\model\Pad();
             $primary_activity_id=intval($params["primary_activity_id"]);
             $school_id=intval($params["school_id"]);
@@ -126,14 +127,14 @@ class Pad extends Backend
 
             $pad_id=$pad->insertGetId($padData);
             foreach($params["organization"] as $key=>$val){
-                $organization_id=$Organization->insertGetId(["name"=>$val]);
+                $organization_id=$organizationModel->insertGetId(["name"=>$val]);
                 $pwoData["primary_activity_id"]=$primary_activity_id;
                 $pwoData["organization_id"]=intval($organization_id);
                 $pwoData["pad_id"]=$pad_id;
-                $result=$pwo->insertGetId($pwoData);
+                $result=$pwoModel->insertGetId($pwoData);
             }
 
-
+            $result=$pad_id;
             Db::commit();
         } catch (ValidateException|PDOException|Exception $e) {
             Db::rollback();
@@ -172,38 +173,39 @@ class Pad extends Backend
         Db::startTrans();
         try {
 
-            $Organization=new \app\admin\model\Organization();
+            $organizationModel=new \app\admin\model\Organization();
             $pwo=new \app\admin\model\Pwo();
             $pad=new \app\admin\model\Pad();
 
             //读取xls
             $xlsPath=$_SERVER["DOCUMENT_ROOT"].$params["xls"];
-           /* $spreadsheet = IOFactory::load($xlsPath);*/
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($xlsPath);
             $sheetData = $spreadsheet->getActiveSheet()->toArray();
-            foreach ($sheetData as $row) {
-                echo "<tr>";
-                foreach ($row as $cell) {
-                    echo "<td>" . $cell . "</td>";
+            foreach ($sheetData as $key=> $row) {
+                if($key>0){
+                    $school=$row[0];
+                    $organizations=$row[1];
+                    $organizationsArray=explode(",",$organizations);
+                    $personal=$row[2];
+                    $schoolModel=new \app\admin\model\School();
+                    $school_id=$schoolModel->insertGetId(["name"=>$school]);
+
+                    $primary_activity_id=intval($params["primary_activity_id"]);
+                    $padData["primary_activity_id"]=$primary_activity_id;
+                    $padData["school_id"]=$school_id;
+                    $padData["personal"]=$personal;
+                    $pad_id=$pad->insertGetId($padData);
+                    if($organizationsArray){
+                        foreach($organizationsArray as $ok=>$ov){
+                            $organization_id=$organizationModel->insertGetId(["name"=>$ov]);
+                            $pwoData["primary_activity_id"]=$primary_activity_id;
+                            $pwoData["organization_id"]=intval($organization_id);
+                            $pwoData["pad_id"]=$pad_id;
+                            $result=$pwo->insertGetId($pwoData);
+                        }
+                    }
+                    $result=$pad_id;
                 }
-                echo "</tr>";
-            }
-exit();
-            $primary_activity_id=intval($params["primary_activity_id"]);
-            $school_id=intval($params["school_id"]);
-
-
-            $padData["primary_activity_id"]=$primary_activity_id;
-            $padData["school_id"]=$school_id;
-            $padData["personal"]=$params["personal"];
-
-            $pad_id=$pad->insertGetId($padData);
-            foreach($params["organization"] as $key=>$val){
-                $organization_id=$Organization->insertGetId(["name"=>$val]);
-                $pwoData["primary_activity_id"]=$primary_activity_id;
-                $pwoData["organization_id"]=intval($organization_id);
-                $pwoData["pad_id"]=$pad_id;
-                $result=$pwo->insertGetId($pwoData);
             }
 
 
@@ -217,7 +219,81 @@ exit();
         }
         $this->success();
     }
+    public function export($ids = null){
+        // 创建新的Spreadsheet对象
+        $spreadsheet = new Spreadsheet();
+        $primaryActivityModel=new \app\admin\model\primary\Activity();
+        $schoolModel=new \app\admin\model\School();
+        $organizationModel=new \app\admin\model\Organization();
+        $pwoModel=new \app\admin\model\Pwo();
+        // 获取活动的工作表
+        $sheet = $spreadsheet->getActiveSheet();
+        $primaryActivity_id=intval($ids);
+        $primaryActivity=$primaryActivityModel->where("id",$primaryActivity_id)->find();
+        $filename=$primaryActivity["name"]."_".date("YmdHis").'.xlsx';
+        // 设置工作表标题
+        $sheet->setTitle($primaryActivity["name"]);
 
+        // 设置单元格数据
+        $sheet->setCellValue('A1', '學校');
+        $sheet->setCellValue('B1', '組織');
+        $sheet->setCellValue('C1', '個人');
+
+        $padModel=new \app\admin\model\Pad();
+        $padList=$padModel->where("primary_activity_id",$primaryActivity_id)->select();
+        if($padList){
+           /* $padList=$padList->toArray();*/
+            $max_organization_str_length=strlen('組織');
+            foreach($padList as $key=>$val){
+                $schoolIndex='A'.($key+2);
+                $school=$schoolModel->where("id",$val["school_id"])->find();
+                $sheet->setCellValue($schoolIndex, $school['name']);
+
+                $personalIndex='C'.($key+2);
+                $sheet->setCellValue($personalIndex, $val["personal"]);
+
+                $organizationListStr="";
+                /*
+               $pwoList=$pwoModel->where("pad_id",$val["id"])->select();
+               if($pwoList){
+                   $pwoList=$pwoList->toArray();
+                  foreach($pwoList as $ok=>$ov){
+                       $organization=$organizationModel->where("id",$ov["organization_id"])->find();
+                       $organizationListStr.=
+                   }
+               }
+               */
+                $organization_id_list=$pwoModel->where("pad_id",$val["id"])->column("organization_id");
+                $organization_name_list=$organizationModel->where("id","in",$organization_id_list)->column("name");
+                if($organization_name_list){
+                    $organizationListStr= implode(",",$organization_name_list);
+                    if(strlen($organizationListStr)>$max_organization_str_length){
+                        $max_organization_str_length=strlen($organizationListStr);
+                    }
+                }
+                $organizationIndex='B'.($key+2);
+                // 设置列宽自适应，根据内容调整列宽度
+                /*$sheet->getColumnDimension('B')->setAutoSize(true);*/
+                $sheet->getColumnDimension('B')->setWidth($max_organization_str_length*1);
+                // 设置列宽自适应，根据内容调整A列宽度
+                $sheet->getStyle('B')->getFont()->setSize(16);
+                $sheet->setCellValue($organizationIndex,$organizationListStr);
+
+            }
+        }
+        // 创建Excel写入器
+        $writer = new Xlsx($spreadsheet);
+
+        // 保存Excel文件到服务器的一个文件中
+        $writer->save($filename);
+
+        // 或者直接输出到浏览器下载
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename='.$filename);
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+    }
     /**
      * 默认生成的控制器所继承的父类中有index/add/edit/del/multi五个基础方法、destroy/restore/recyclebin三个回收站方法
      * 因此在当前控制器中可不用编写增删改查的代码,除非需要自己控制这部分逻辑
