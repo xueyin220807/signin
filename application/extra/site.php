@@ -9,24 +9,24 @@ return array (
   'forbiddenip' => '',
   'languages' => 
   array (
-    'backend' => 'zh-cn',
-    'frontend' => 'zh-cn',
+    'backend' => 'zh-hk',
+    'frontend' => 'zh-hk',
   ),
   'fixedpage' => 'dashboard',
   'categorytype' => 
   array (
-    'default' => 'Default',
-    'page' => 'Page',
-    'article' => 'Article',
+    'default' => '默認',
+    'page' => '單頁',
+    'article' => '文章',
     'test' => 'Test',
   ),
   'configgroup' => 
   array (
-    'basic' => 'Basic',
-    'email' => 'Email',
-    'dictionary' => 'Dictionary',
-    'user' => 'User',
-    'example' => 'Example',
+    'basic' => '基礎配置',
+    'email' => '郵件配置',
+    'dictionary' => '字典配置',
+    'user' => '用戶配置',
+    'example' => '示例分組',
   ),
   'mail_type' => '1',
   'mail_smtp_host' => 'smtp.qq.com',
@@ -37,8 +37,8 @@ return array (
   'mail_from' => '',
   'attachmentcategory' => 
   array (
-    'category1' => 'Category1',
-    'category2' => 'Category2',
-    'custom' => 'Custom',
+    'category1' => '分類一',
+    'category2' => '分類二',
+    'custom' => '自定義',
   ),
 );

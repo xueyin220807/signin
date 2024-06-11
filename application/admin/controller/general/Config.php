@@ -80,6 +80,7 @@ class Config extends Backend
             $v['active'] = !$index ? true : false;
             $index++;
         }
+        unset($siteList["email"]);
         $this->view->assign('siteList', $siteList);
         $this->view->assign('typeList', ConfigModel::getTypeList());
         $this->view->assign('ruleList', ConfigModel::getRegexList());
