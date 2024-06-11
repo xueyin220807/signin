@@ -3,6 +3,7 @@
 namespace app\admin\controller;
 
 use app\common\controller\Backend;
+use fast\Random;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use think\Db;
@@ -133,7 +134,10 @@ class Pad extends Backend
                 $pwoData["pad_id"]=$pad_id;
                 $result=$pwoModel->insertGetId($pwoData);
             }
-
+            $userModel=new \app\admin\model\User();
+            $personal_id=$userModel->padUserAdd($params["personal"]);
+            $padpModel=new \app\admin\model\Padp();
+            $padpModel->insertGetId(["pad_id"=>$pad_id,"personal_id"=>$personal_id]);
             $result=$pad_id;
             Db::commit();
         } catch (ValidateException|PDOException|Exception $e) {

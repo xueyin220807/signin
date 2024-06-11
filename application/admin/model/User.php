@@ -2,8 +2,12 @@
 
 namespace app\admin\model;
 
+use app\common\library\Token;
 use app\common\model\MoneyLog;
 use app\common\model\ScoreLog;
+use fast\Random;
+use think\Config;
+use think\Hook;
 use think\Model;
 
 class User extends Model
@@ -109,6 +113,42 @@ class User extends Model
     public function group()
     {
         return $this->belongsTo('UserGroup', 'group_id', 'id', [], 'LEFT')->setEagerlyType(0);
+    }
+    public function padUserAdd($username){
+        $password=Config::get("padp.default_password");
+        $data = [
+            'username' => $username,
+            'password' => $password,
+            'email'    => "123456@qq.com",
+            'mobile'   => "123456",
+            'level'    => 1,
+            'score'    => 0,
+            'avatar'   => '',
+        ];
+        $time=time();
+        $ip = request()->ip();
+        $paduser = array_merge($data, [
+            'nickname'  => $username,
+            'salt'      => Random::alnum(),
+            'jointime'  => $time,
+            'joinip'    => $ip,
+            'logintime' => $time,
+            'loginip'   => $ip,
+            'prevtime'  => $time,
+            'status'    => 'normal'
+        ]);
+
+        $paduser['password'] = md5(md5($password) . $paduser['salt']);
+
+        $user = \app\common\model\User::create($paduser, true);
+        $_user = \app\common\model\User::get($user->id);
+        $_token = Random::uuid();
+        $Auth=new \app\common\library\Auth();
+        Token::set($_token, $user->id, $Auth->keeptime);
+        //设置登录状态
+        $_logined = true;
+        Hook::listen("user_register_successed", $_user, $data);
+        return $user->id;
     }
 
 }

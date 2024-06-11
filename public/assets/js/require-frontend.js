@@ -38,7 +38,7 @@ require.config({
         'addtabs': '../libs/fastadmin-addtabs/jquery.addtabs',
         'slimscroll': '../libs/jquery-slimscroll/jquery.slimscroll',
         'validator': '../libs/nice-validator/dist/jquery.validator',
-        'validator-lang': '../libs/nice-validator/dist/local/zh-CN',
+        'validator-lang': '../libs/nice-validator/dist/local/zh-HK',
         'toastr': '../libs/toastr/toastr',
         'jstree': '../libs/jstree/dist/jstree.min',
         'layer': '../libs/fastadmin-layer/dist/layer',

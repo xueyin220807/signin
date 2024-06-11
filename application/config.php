@@ -306,4 +306,7 @@ return [
         //API接口地址
         'api_url'               => 'https://api.fastadmin.net',
     ],
+    'padp'=>[
+        'default_password'=>123456
+    ]
 ];

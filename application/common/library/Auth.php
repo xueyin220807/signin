@@ -229,7 +229,35 @@ class Auth
         //直接登录会员
         return $this->direct($user->id);
     }
+    public function loginWithpadp($account, $password,$pad_id)
+    {
+        $field = Validate::is($account, 'email') ? 'email' : (Validate::regex($account, '/^1\d{10}$/') ? 'mobile' : 'username');
+        $user = User::get([$field => $account]);
+        if (!$user) {
+            $this->setError('Account is incorrect');
+            return false;
+        }
+        $padModel=new \app\admin\model\Pad();
+        //$pad=$padModel->where("id",$pad_id)->find();
+        $padpModel=new \app\admin\model\Padp();
+        $padp=$padpModel->where("pad_id",$pad_id)->find();
+        $user=User::get(["id" => $padp["personal_id"]]);
+        if (!$user) {
+            $this->setError('Account is incorrect');
+            return false;
+        }
+        if ($user->status != 'normal') {
+            $this->setError('Account is locked');
+            return false;
+        }
+        if ($user->password != $this->getEncryptPassword($password, $user->salt)) {
+            $this->setError('Password is incorrect');
+            return false;
+        }
 
+        //直接登录会员
+        return $this->direct($user->id);
+    }
     /**
      * 退出
      *

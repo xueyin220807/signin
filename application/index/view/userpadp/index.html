@@ -1,0 +1,105 @@
+<style>
+    .basicinfo {
+        margin: 15px 0;
+    }
+
+    .basicinfo .row > .col-xs-4 {
+        padding-right: 0;
+    }
+
+    .basicinfo .row > div {
+        margin: 5px 0;
+    }
+    nav{
+        display: none;
+    }
+    .user-baseinfo-column{
+        display: flex;
+        /*justify-content: center;*/
+    }
+    .class37{
+        display: flex;
+    }
+</style>
+<div id="content-container" class="container">
+    <div class="row">
+        <div class="col-md-3">
+            {include file="common/sidenavpadp" /}
+        </div>
+        <div class="col-md-9">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <h2 class="page-header">
+                        {:__('Signin')}
+                    </h2>
+                    <div class="row user-baseinfo user-baseinfo-column">
+                        <div class="col-md-3 col-sm-3 col-xs-3 text-center user-center">
+                          <!--  <a href="{:url('userpadp/profile')}" title="{:__('Click to edit')}">
+                                <span class="avatar-img"><img src="{$user.avatar|htmlentities|cdnurl}" alt=""></span>
+                            </a>-->
+                            <div class="class37">
+                                <label class="control-label">{:__('ActivityName')}:</label>
+                                <div class="">{$padpData.activity_name}</div>
+                            </div>
+                            <div class="class37">
+                                <label class="control-label">{:__('Organizations')}:</label>
+                                <div class="">{$padpData.organization_names}</div>
+                            </div>
+                            <div class="class37">
+                                <label class="control-label">{:__('Personal')}:</label>
+                                <div class="">{$padpData.personal}</div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-9 col-sm-9 col-xs-9">
+                            <!--<svg t="1718099315795" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8896" width="200" height="200">
+                                <path d="M704 170.666667H320v53.333333a21.333333 21.333333 0 0 1-42.666667 0V170.666667h-42.666666a106.666667 106.666667 0 0 0-106.666667 106.666666v85.333334h768v-85.333334a106.666667 106.666667 0 0 0-106.666667-106.666666h-42.666666v53.333333a21.333333 21.333333 0 0 1-42.666667 0V170.666667z m42.666667-42.666667h42.666666a149.333333 149.333333 0 0 1 149.333334 149.333333v512a149.333333 149.333333 0 0 1-149.333334 149.333334H234.666667a149.333333 149.333333 0 0 1-149.333334-149.333334V277.333333a149.333333 149.333333 0 0 1 149.333334-149.333333h42.666666V96a21.333333 21.333333 0 0 1 42.666667 0V128h384V96a21.333333 21.333333 0 0 1 42.666667 0V128z m149.333333 277.333333H128v384a106.666667 106.666667 0 0 0 106.666667 106.666667h554.666666a106.666667 106.666667 0 0 0 106.666667-106.666667V405.333333zM327.210667 642.304a21.333333 21.333333 0 0 1 28.245333-32l98.048 86.549333a21.333333 21.333333 0 0 0 29.866667-1.642666l179.882666-197.568a21.333333 21.333333 0 0 1 31.552 28.714666l-179.861333 197.568a64 64 0 0 1-89.664 4.906667l-98.069333-86.528z" fill="#f4ea2a" p-id="8897"></path>
+                            </svg>-->
+                            {if $padpData.status==0}
+                            <a class="btn btn-primary" href="{:url('userpadp/signin')}?pad_id={$pad_id}">{:__('Signin')}</a>
+                            {/if}
+                            {if $padpData.status==1}
+                            <button class="btn-default" disabled="disabled">{:__('Signed in')}</button>
+                            {/if}
+                        </div>
+                        <!--<div class="col-md-9 col-sm-9 col-xs-9">
+                            <div class="ui-content">
+                                <h4><a href="{:url('user/profile')}">{$user.nickname|htmlentities}</a></h4>
+                                <p class="text-muted">
+                                    {$user.bio|default=__("This guy hasn't written anything yet")|htmlentities}
+                                </p>
+                            </div>
+                        </div>-->
+
+                      <!--  <div class="col-md-9 col-sm-9 col-xs-12">
+                            <div class="ui-content">
+                                <div class="basicinfo">
+                                    <div class="row">
+                                        <div class="col-xs-4 col-md-2">{:__('Money')}</div>
+                                        <div class="col-xs-8 col-md-4">
+                                            <a href="javascript:;" class="viewmoney">{$user.money}</a>
+                                        </div>
+                                        <div class="col-xs-4 col-md-2">{:__('Score')}</div>
+                                        <div class="col-xs-8 col-md-4">
+                                            <a href="javascript:;" class="viewscore">{$user.score}</a>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xs-4 col-md-2">{:__('Logintime')}</div>
+                                        <div class="col-xs-8 col-md-4">{$user.logintime|date="Y-m-d H:i:s",###}</div>
+                                        <div class="col-xs-4 col-md-2">{:__('Prevtime')}</div>
+                                        <div class="col-xs-8 col-md-4">{$user.prevtime|date="Y-m-d H:i:s",###}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.title="";
+</script>
