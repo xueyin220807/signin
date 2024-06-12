@@ -340,6 +340,7 @@ class Pad extends Backend
            /* var_dump($qrcodePath);*/
 
             $this->assign("qrcodePath",$qrcodePath);
+            $this->assign("qrcodeLink",$url);
             return $this->view->fetch();
         }
         catch(\Exception $e){

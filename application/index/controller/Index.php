@@ -13,7 +13,11 @@ class Index extends Frontend
 
     public function index()
     {
-        exit();
+        $jump_url=$_SERVER["REQUEST_SCHEME"].'://'.$_SERVER["HTTP_HOST"].'/Index/index/scanQrcode';
+        header('Location: '.$jump_url);
+        return $this->view->fetch();
+    }
+    public function scanQrcode(){
         return $this->view->fetch();
     }
 

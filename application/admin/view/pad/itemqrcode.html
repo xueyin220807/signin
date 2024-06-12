@@ -33,9 +33,18 @@
         justify-content: center;
         align-items: center;
     }
+    .qrcodeContainer{
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
 </style>
 <form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
-<img src="{$qrcodePath}"/>
+    <div class="qrcodeContainer">
+        <a href="{$qrcodeLink}">{$qrcodeLink}</a>
+        <img src="{$qrcodePath}"/>
+    </div>
+
 </form>
 <script>
 
