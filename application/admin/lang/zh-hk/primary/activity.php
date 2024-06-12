@@ -11,5 +11,6 @@ return [
     'Starttime'=>'活動開始時間',
     'Endtime'=>'活動結束時間',
     'addData'=>'新增數據',
-    'activityData'=>'活動數據'
+    'activityData'=>'活動數據',
+    'ExportQrcode'=>'匯出二維碼'
 ];

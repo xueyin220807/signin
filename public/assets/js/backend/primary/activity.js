@@ -40,7 +40,13 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     title:function (row) {
                                         return __('activityData')+"-"+ row.name;
                                     },
-                                    url: 'pad/innerindex'
+                                    url: 'pad/innerindex',
+                                    visible:function(row){
+                                        if(row.pad_count>0){
+                                            return true;
+                                        }
+                                        return false;
+                                    }
                                 },
                                 {
                                 name: 'detail',
@@ -71,7 +77,30 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                         return __('Export')+"-"+ row.name;
                                     },
                                     url: 'pad/export',
-                                    extend:' target="_blank"'
+                                    extend:' target="_blank"',
+                                    visible:function(row){
+                                        if(row.pad_count>0){
+                                            return true;
+                                        }
+                                        return false;
+                                    }
+                                },
+                                {
+                                    name: 'export',
+                                    text: __('ExportQrcode'),
+                                    icon: 'fa fa-list',
+                                    classname: 'btn btn-info btn-xs btn-detail',
+                                    title:function (row) {
+                                        return __('Export')+"-"+ row.name;
+                                    },
+                                    url: 'primary/activity/exportqrcode',
+                                    extend:' target="_blank"',
+                                    visible:function(row){
+                                        if(row.pad_count>0){
+                                            return true;
+                                        }
+                                        return false;
+                                    }
                                 }
                             ],
                             formatter: Table.api.formatter.operate}

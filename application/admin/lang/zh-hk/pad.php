@@ -11,5 +11,6 @@ return [
     'Primary_activity'=>'活動',
     'Enter at least one organization name'=>'至少輸入一個組織名',
     'DownloadImportTemplate'=>'下載導入範本',
-    'Choice a excel'=>'選擇excel'
+    'Choice a excel'=>'選擇excel',
+    'Qrcode'=>'二維碼'
 ];
