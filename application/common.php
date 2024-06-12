@@ -507,3 +507,27 @@ EOT;
         return $icon;
     }
 }
+
+
+function parseQueryParamsFromUrl($url) {
+    $parsedUrl = parse_url($url);
+
+    if (isset($parsedUrl['query'])) {
+        parse_str($parsedUrl['query'], $output);
+        return $output; // 返回查询参数数组
+    } else {
+        return []; // 如果没有查询参数，返回一个空数组
+    }
+}
+function createDirIfNotExists($dirPath, $mode = 0777, $recursive = true) {
+    // 检查目录是否存在
+    if (!is_dir($dirPath)) {
+        // 如果目录不存在，尝试创建它
+        if (!mkdir($dirPath, $mode, $recursive)) {
+            // 如果创建失败，返回 false 并打印错误
+            throw new \Exception("Failed to create directory: $dirPath");
+        }
+    }
+    // 目录存在或成功创建，返回 true
+    return true;
+}

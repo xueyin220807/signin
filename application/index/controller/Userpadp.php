@@ -25,7 +25,24 @@ class Userpadp extends Frontend
     protected $noNeedRight = ['*'];
 
 
+    public function urlAppendPadId($url){
+        $pad_id=$this->request->request('pad_id',0,"intval");
+        if($pad_id>0){
+            /*if(strpos("pad_id",$url)===false){
+                $url=$url."?pad_id=".$pad_id;
+            }*/
+            $output=parseQueryParamsFromUrl($url);
+            $o_pad_id=0;
+            if(isset($output["pad_id"])){
+                $o_pad_id=intval($output["pad_id"]);
+            }
 
+            if($o_pad_id==0){
+                $url=$url."?pad_id=".$pad_id;
+            }
+        }
+        return $url;
+    }
     public function p_initialize()
     {
         //移除HTML标签
@@ -55,10 +72,7 @@ class Userpadp extends Frontend
             $this->auth->init($token);
             //检测是否登录
             if (!$this->auth->isLogin()) {
-                $pad_id=$this->request->request('pad_id',0,"intval");
-                $url=url('index/userpadp/login')."?pad_id=".$pad_id;
-                /*var_dump($url);
-                exit();*/
+                $url=$this->urlAppendPadId(url('index/userpadp/login'));
                 $this->error(__('Please login first'), $url);
             }
             // 判断是否需要验证权限
@@ -197,7 +211,7 @@ class Userpadp extends Frontend
         $padModel=new \app\admin\model\Pad();
         $pad=$padModel->where("id",$pad_id)->find();
         $padModel->where("id",$pad_id)->update(["status"=>1]);
-        $url=url('userpadp/index')."?pad_id=".$pad_id;
+        $url=$this->urlAppendPadId(url('userpadp/index'));
         $this->success(__('Successful check-in'), $url);
     }
     /**
@@ -282,7 +296,7 @@ class Userpadp extends Frontend
         $pad_id=$this->request->request('pad_id',0,"intval");
         $url = $this->request->request('url', '', 'url_clean');
         if ($this->auth->id) {
-            $loginedUrl=url('user/userpadp')."?pad_id=".$pad_id;
+            $loginedUrl=$this->urlAppendPadId(url('userpadp/index'));
             $this->success(__('You\'ve logged in, do not login again'), $url ?: $loginedUrl);
         }
         if ($this->request->isPost()) {
@@ -314,7 +328,8 @@ class Userpadp extends Frontend
             }
             //var_dump($pad_id);
             if ($this->auth->loginWithpadp($account, $password,$pad_id)) {
-                $this->success(__('Logged in successful'), $url ? $url : url('userpadp/index'));
+                $url2=$this->urlAppendPadId(url('userpadp/index'));
+                $this->success(__('Logged in successful'), $url ? $url : $url2);
             } else {
                 $this->error($this->auth->getError(), null, ['token' => $this->request->token()]);
             }
@@ -339,7 +354,8 @@ class Userpadp extends Frontend
             $this->token();
             //退出本站
             $this->auth->logout();
-            $url=url('userpadp/index')."?pad_id=".$pad_id;
+            //$url=url('userpadp/index')."?pad_id=".$pad_id;
+            $url=$this->urlAppendPadId(url('userpadp/index'));
             $this->success(__('Logout successful'), $url);
         }
         $html = "<form id='logout_submit' name='logout_submit' action='' method='post'>" . token() . "<input type='submit' value='ok' style='display:none;'></form>";
@@ -397,7 +413,8 @@ class Userpadp extends Frontend
 
             $ret = $this->auth->changepwd($newpassword, $oldpassword);
             if ($ret) {
-                $url=url('userpadp/login')."?pad_id=".$pad_id;
+                /*$url=url('userpadp/login')."?pad_id=".$pad_id;*/
+                $url=$this->urlAppendPadId(url('userpadp/login'));
                 $this->success(__('Reset password successful'), $url);
             } else {
                 $this->error($this->auth->getError(), null, ['token' => $this->request->token()]);

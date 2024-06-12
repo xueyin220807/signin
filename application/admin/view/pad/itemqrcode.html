@@ -1,0 +1,42 @@
+<script src="/assets/js/vue.global.js"></script>
+<style>
+    .organization{
+        display: flex;
+        gap:1rem;
+    }
+    .organizationColumn{
+        display: flex;
+        flex-direction: column;
+        gap:1.5rem;
+    }
+    .organizationAdd{
+        width:10rem;
+    }
+    .form-group-inner{
+        margin-left:unset !important;
+        margin-right:unset !important;
+        margin-bottom:unset !important;
+    }
+    .form-group-inner-column.has-error{
+        display: flex;
+        flex-direction: column;
+    }
+    .form-group-inner-column.has-error .n-right{
+        margin-top: 0;
+    }
+    img{
+        width:40rem;
+        height:40rem;
+    }
+    form{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<form id="add-form" class="form-horizontal" role="form" data-toggle="validator" method="POST" action="">
+<img src="{$qrcodePath}"/>
+</form>
+<script>
+
+</script>

@@ -77,12 +77,28 @@ define(['jquery', 'bootstrap', 'backend', 'table', 'form'], function ($, undefin
                                     url: 'pad/del'
                                 },
                             ],formatter: Table.api.formatter.operate}*/
-                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,formatter: Table.api.formatter.operate}
+                        {field: 'operate', title: __('Operate'), table: table, events: Table.api.events.operate,
+                            buttons: [
+                                {
+                                    name: 'detail',
+                                    text: __('Qrcode'),
+                                    icon: 'fa fa-list',
+                                    classname: 'btn btn-info btn-xs btn-detail btn-dialog',
+                                    title:function (row) {
+                                        return __('Qrcode')+"-"+ row.personal;
+                                    },
+                                    url: 'pad/itemqrcode'
+                                },
+                            ],
+                            formatter: Table.api.formatter.operate}
                     ]
                 ]
             });
 
             // 为表格绑定事件
+            Table.api.bindevent(table);
+        },
+        itemqrcode:function(){
             Table.api.bindevent(table);
         },
         add: function () {

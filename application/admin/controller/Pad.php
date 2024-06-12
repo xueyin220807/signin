@@ -2,7 +2,9 @@
 
 namespace app\admin\controller;
 
+use app\admin\library\thinkQrcode;
 use app\common\controller\Backend;
+use chillerlan\QRCode\QRCode;
 use fast\Random;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -12,6 +14,9 @@ use think\exception\PDOException;
 use think\exception\ValidateException;
 use think\response\Json;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+/*use BaconQrCode\Writer;
+use BaconQrCode\Renderer\Image\Png;
+use BaconQrCode\Renderer\RendererInterface;*/
 /**
  * 
  *
@@ -301,6 +306,46 @@ class Pad extends Backend
         header('Cache-Control: max-age=0');
 
         $writer->save('php://output');
+    }
+    public function qrcodeBySvgToBase64($url,$pic_name){
+        $qrcode = new QRCode();
+        $qrcodeBase64 = $qrcode->render($url);
+        $this->assign("qrcodeBase64",$qrcodeBase64);
+        $svgData = str_replace('data:image/svg+xml;base64,', '', $qrcodeBase64);
+        $decodedSvgData = base64_decode($svgData);
+        $imagick = new \Imagick();
+        // 读取SVG数据
+        $imagick->readImageBlob($decodedSvgData);
+        // 设置输出格式为PNG
+        $imagick->setImageFormat('png');
+        // 将SVG转换为PNG并获取转换后的数据
+        $pngData = $imagick->getImageBlob();
+        // 创建PNG图像资源
+       $pngImage = imagecreatefromstring($pngData);
+        $pic_dir="/uploads/".date("Ymd");
+        $fileSystemDir=$_SERVER["DOCUMENT_ROOT"].$pic_dir;
+        $filename=$fileSystemDir."/".$pic_name;
+         imagepng($pngImage, $filename);
+    }
+    public function itemqrcode($ids=null){
+        try{
+            $id=intval($ids);
+
+            $url = $_SERVER["REQUEST_SCHEME"]."://".$_SERVER["HTTP_HOST"]."/index/userpadp/index.html?pad_id=".$id;
+
+
+
+            $qrcode = new thinkQrcode();
+            $qrcodePath=$qrcode->png($url)->getPath();
+           /* var_dump($qrcodePath);*/
+
+            $this->assign("qrcodePath",$qrcodePath);
+            return $this->view->fetch();
+        }
+        catch(\Exception $e){
+            var_dump($e->getMessage());
+        }
+
     }
     /**
      * 默认生成的控制器所继承的父类中有index/add/edit/del/multi五个基础方法、destroy/restore/recyclebin三个回收站方法
